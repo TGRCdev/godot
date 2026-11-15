@@ -132,6 +132,9 @@ class SceneTreeEditor : public Control {
 	bool connect_to_script_mode = false;
 	bool connecting_signal = false;
 	bool update_when_invisible = true;
+	bool emphasize_named = false;
+	bool emphasize_scripted = false;
+	bool emphasize_unique = false;
 
 	int blocked;
 
@@ -271,6 +274,9 @@ public:
 	void set_connect_to_script_mode(bool p_enable);
 	void set_connecting_signal(bool p_enable);
 	void set_update_when_invisible(bool p_enable);
+	void set_emphasize_named(bool p_enable, bool p_update_settings);
+	void set_emphasize_scripted(bool p_enable, bool p_update_settings);
+	void set_emphasize_unique(bool p_enable, bool p_update_settings);
 
 	Tree *get_scene_tree() { return tree; }
 

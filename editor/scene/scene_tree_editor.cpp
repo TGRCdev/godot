@@ -545,6 +545,21 @@ void SceneTreeEditor::_update_node(Node *p_node, TreeItem *p_item, bool p_part_o
 		}
 	}
 
+	if (emphasize_named || emphasize_scripted || emphasize_unique) {
+
+		bool emphasize = false;
+
+		Ref<Script> script = p_node->get_script();
+
+		emphasize = emphasize || (emphasize_named && p_node->get_class() != p_node->get_name());
+		emphasize = emphasize || (emphasize_scripted && script.is_valid());
+		emphasize = emphasize || (emphasize_unique && p_node->is_unique_name_in_owner());
+
+		if (!emphasize) {
+			_set_item_custom_color(p_item, get_theme_color(SNAME("font_disabled_color"), EditorStringName(Editor)));
+		}
+	}
+
 	if (connect_to_script_mode) {
 		Color accent = get_theme_color(SNAME("accent_color"), EditorStringName(Editor));
 
@@ -2277,6 +2292,33 @@ void SceneTreeEditor::set_connecting_signal(bool p_enable) {
 
 void SceneTreeEditor::set_update_when_invisible(bool p_enable) {
 	update_when_invisible = p_enable;
+	_update_tree();
+}
+
+void SceneTreeEditor::set_emphasize_named(bool p_enable, bool p_update_settings) {
+	if (p_update_settings) {
+		EditorSettings::get_singleton()->set("docks/scene_tree/emphasize_named", p_enable);
+	}
+	emphasize_named = p_enable;
+	node_cache.force_update = true;
+	_update_tree();
+}
+
+void SceneTreeEditor::set_emphasize_scripted(bool p_enable, bool p_update_settings) {
+	if (p_update_settings) {
+		EditorSettings::get_singleton()->set("docks/scene_tree/emphasize_scripted", p_enable);
+	}
+	emphasize_scripted = p_enable;
+	node_cache.force_update = true;
+	_update_tree();
+}
+
+void SceneTreeEditor::set_emphasize_unique(bool p_enable, bool p_update_settings) {
+	if (p_update_settings) {
+		EditorSettings::get_singleton()->set("docks/scene_tree/emphasize_unique", p_enable);
+	}
+	emphasize_unique = p_enable;
+	node_cache.force_update = true;
 	_update_tree();
 }
 

@@ -1,4 +1,4 @@
-/**************************************************************************/
+	/**************************************************************************/
 /*  scene_tree_dock.cpp                                                   */
 /**************************************************************************/
 /*                         This file is part of:                          */
@@ -1371,6 +1371,15 @@ void SceneTreeDock::_tool_selected(int p_tool, bool p_confirm_override) {
 		case TOOL_ACCESSIBILITY_WARNINGS: {
 			scene_tree->set_accessibility_warnings(!EDITOR_GET("docks/scene_tree/accessibility_warnings"), true);
 		} break;
+		case TOOL_EMPHASIZE_NAMED: {
+			scene_tree->set_emphasize_named(!EDITOR_GET("docks/scene_tree/emphasize_named"), true);
+		} break;
+		case TOOL_EMPHASIZE_SCRIPTED: {
+			scene_tree->set_emphasize_scripted(!EDITOR_GET("docks/scene_tree/emphasize_scripted"), true);
+		} break;
+		case TOOL_EMPHASIZE_UNIQUE: {
+			scene_tree->set_emphasize_unique(!EDITOR_GET("docks/scene_tree/emphasize_unique"), true);
+		} break;
 		case TOOL_SCENE_EDITABLE_CHILDREN: {
 			if (!profile_allow_editing) {
 				break;
@@ -1790,6 +1799,9 @@ void SceneTreeDock::_notification(int p_what) {
 			scene_tree->set_auto_expand_selected(EDITOR_GET("docks/scene_tree/auto_expand_to_selected"), false);
 			scene_tree->set_hide_filtered_out_parents(EDITOR_GET("docks/scene_tree/hide_filtered_out_parents"), false);
 			scene_tree->set_accessibility_warnings(EDITOR_GET("docks/scene_tree/accessibility_warnings"), false);
+			scene_tree->set_emphasize_named(EDITOR_GET("docks/scene_tree/emphasize_named"), false);
+			scene_tree->set_emphasize_scripted(EDITOR_GET("docks/scene_tree/emphasize_scripted"), false);
+			scene_tree->set_emphasize_unique(EDITOR_GET("docks/scene_tree/emphasize_unique"), false);
 		} break;
 
 		case NOTIFICATION_EXIT_TREE: {
@@ -1801,6 +1813,9 @@ void SceneTreeDock::_notification(int p_what) {
 				scene_tree->set_auto_expand_selected(EDITOR_GET("docks/scene_tree/auto_expand_to_selected"), false);
 				scene_tree->set_hide_filtered_out_parents(EDITOR_GET("docks/scene_tree/hide_filtered_out_parents"), false);
 				scene_tree->set_accessibility_warnings(EDITOR_GET("docks/scene_tree/accessibility_warnings"), false);
+				scene_tree->set_emphasize_named(EDITOR_GET("docks/scene_tree/emphasize_named"), false);
+				scene_tree->set_emphasize_scripted(EDITOR_GET("docks/scene_tree/emphasize_scripted"), false);
+				scene_tree->set_emphasize_unique(EDITOR_GET("docks/scene_tree/emphasize_unique"), false);
 			}
 			if (EditorSettings::get_singleton()->check_changed_settings_in_group("interface/editor/timers")) {
 				inspect_hovered_node_delay->set_wait_time(EDITOR_GET("interface/editor/timers/dragging_hover_wait_seconds"));
@@ -4445,6 +4460,7 @@ void SceneTreeDock::_setup_tree_menu() {
 	tree_menu->add_submenu_node_item(TTRC("All Scene Sub-Resources"), resource_list);
 
 	_append_filter_options_to(tree_menu);
+	_append_emphasize_options_to(tree_menu);
 }
 
 void SceneTreeDock::_update_tree_menu() {
@@ -4453,6 +4469,9 @@ void SceneTreeDock::_update_tree_menu() {
 	tree_menu->set_item_checked(tree_menu->get_item_index(TOOL_CENTER_PARENT), EDITOR_GET("docks/scene_tree/center_node_on_reparent"));
 	tree_menu->set_item_checked(tree_menu->get_item_index(TOOL_HIDE_FILTERED_OUT_PARENTS), EDITOR_GET("docks/scene_tree/hide_filtered_out_parents"));
 	tree_menu->set_item_checked(tree_menu->get_item_index(TOOL_ACCESSIBILITY_WARNINGS), EDITOR_GET("docks/scene_tree/accessibility_warnings"));
+	tree_menu->set_item_checked(tree_menu->get_item_index(TOOL_EMPHASIZE_NAMED), EDITOR_GET("docks/scene_tree/emphasize_named"));
+	tree_menu->set_item_checked(tree_menu->get_item_index(TOOL_EMPHASIZE_SCRIPTED), EDITOR_GET("docks/scene_tree/emphasize_scripted"));
+	tree_menu->set_item_checked(tree_menu->get_item_index(TOOL_EMPHASIZE_UNIQUE), EDITOR_GET("docks/scene_tree/emphasize_unique"));
 }
 
 void SceneTreeDock::_filter_changed(const String &p_filter) {
@@ -4519,6 +4538,21 @@ void SceneTreeDock::_append_filter_options_to(PopupMenu *p_menu) {
 
 	p_menu->add_item(TTRC("Filter by Group"), FILTER_BY_GROUP);
 	p_menu->set_item_tooltip(-1, TTRC("Selects all Nodes belonging to the given group.\nIf empty, selects any Node belonging to any group.\nInserts \"group:\". You can also use the shorthand \"g:\"."));
+}
+
+void SceneTreeDock::_append_emphasize_options_to(PopupMenu *p_menu) {
+	if (p_menu->get_item_count() > 0) {
+		p_menu->add_separator();
+	}
+
+	p_menu->add_check_item(TTRC("Emphasize Named Nodes"), TOOL_EMPHASIZE_NAMED);
+	p_menu->set_item_tooltip(-1, TTRC("Emphasizes Nodes that have been renamed from their node type."));
+
+	p_menu->add_check_item(TTRC("Emphasize Scripted Nodes"), TOOL_EMPHASIZE_SCRIPTED);
+	p_menu->set_item_tooltip(-1, TTRC("Emphasizes Nodes that have scripts attached to them."));
+
+	p_menu->add_check_item(TTRC("Emphasize Unique Nodes"), TOOL_EMPHASIZE_UNIQUE);
+	p_menu->set_item_tooltip(-1, TTRC("Emphasizes Nodes that have been given unique names in the scene."));
 }
 
 String SceneTreeDock::get_filter() {

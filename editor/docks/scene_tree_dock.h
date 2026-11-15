@@ -96,6 +96,9 @@ class SceneTreeDock : public EditorDock {
 		TOOL_CENTER_PARENT,
 		TOOL_HIDE_FILTERED_OUT_PARENTS,
 		TOOL_ACCESSIBILITY_WARNINGS,
+		TOOL_EMPHASIZE_NAMED,
+		TOOL_EMPHASIZE_SCRIPTED,
+		TOOL_EMPHASIZE_UNIQUE,
 	};
 
 	enum {
@@ -303,6 +306,7 @@ class SceneTreeDock : public EditorDock {
 	void _filter_gui_input(const Ref<InputEvent> &p_event);
 	void _filter_option_selected(int option);
 	void _append_filter_options_to(PopupMenu *p_menu);
+	void _append_emphasize_options_to(PopupMenu *p_menu);
 
 	void _perform_instantiate_scenes(const Vector<String> &p_files, Node *p_parent, int p_pos);
 	void _perform_create_audio_stream_players(const Vector<String> &p_files, Node *p_parent, int p_pos);
