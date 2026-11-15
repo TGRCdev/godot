@@ -327,6 +327,15 @@
 		<member name="docks/scene_tree/derive_script_globals_by_name" type="bool" setter="" getter="">
 			If [code]true[/code], when extending a script, the global class name of the script is inserted in the script creation dialog, if it exists. If [code]false[/code], the script's file path is always inserted.
 		</member>
+		<member name="docks/scene_tree/emphasize_named" type="bool" setter="" getter="">
+			If [code]true[/code], highlights nodes in the scene tree dock whose name is distinct from their node type (i.e. a VBoxContainer named "VBoxContainer" is de-emphasized).
+		</member>
+		<member name="docks/scene_tree/emphasize_scripted" type="bool" setter="" getter="">
+			If [code]true[/code], highlights nodes in the scene tree dock that have scripts.
+		</member>
+		<member name="docks/scene_tree/emphasize_unique" type="bool" setter="" getter="">
+			If [code]true[/code], highlights nodes in the scene tree dock that are marked as unique-accessible.
+		</member>
 		<member name="docks/scene_tree/hide_filtered_out_parents" type="bool" setter="" getter="">
 			If [code]true[/code], the scene tree dock will only show nodes that match the filter, without showing parents that don't. This settings can also be changed in the Scene dock's top menu.
 		</member>
