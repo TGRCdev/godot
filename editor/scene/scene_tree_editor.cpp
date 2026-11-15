@@ -546,7 +546,6 @@ void SceneTreeEditor::_update_node(Node *p_node, TreeItem *p_item, bool p_part_o
 	}
 
 	if (emphasize_named || emphasize_scripted || emphasize_unique) {
-
 		bool emphasize = false;
 
 		Ref<Script> script = p_node->get_script();
