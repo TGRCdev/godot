@@ -36,6 +36,7 @@
 #include "core/object/callable_mp.h"
 #include "core/object/class_db.h"
 #include "core/object/script_language.h"
+#include "core/string/regex.h"
 #include "editor/animation/animation_player_editor_plugin.h"
 #include "editor/docks/editor_dock_manager.h"
 #include "editor/docks/groups_dock.h"
@@ -549,8 +550,16 @@ void SceneTreeEditor::_update_node(Node *p_node, TreeItem *p_item, bool p_part_o
 		bool emphasize = false;
 
 		Ref<Script> script = p_node->get_script();
+		String node_name = p_node->get_name();
+		String node_class = p_node->get_class();
 
-		emphasize = emphasize || (emphasize_named && p_node->get_class() != p_node->get_name());
+		if(emphasize_named) {
+			Ref<RegEx> named_regex;
+			named_regex.instantiate();
+			named_regex->compile("^" + node_class + "\\d*$");
+			emphasize = named_regex->search(node_name).is_null();
+		}
+
 		emphasize = emphasize || (emphasize_scripted && script.is_valid());
 		emphasize = emphasize || (emphasize_unique && p_node->is_unique_name_in_owner());
 
