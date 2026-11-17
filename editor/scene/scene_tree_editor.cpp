@@ -553,7 +553,7 @@ void SceneTreeEditor::_update_node(Node *p_node, TreeItem *p_item, bool p_part_o
 		String node_name = p_node->get_name();
 		String node_class = p_node->get_class();
 
-		if(emphasize_named) {
+		if (emphasize_named) {
 			Ref<RegEx> named_regex;
 			named_regex.instantiate();
 			named_regex->compile("^" + node_class + "\\d*$");
